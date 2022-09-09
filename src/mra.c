@@ -223,6 +223,14 @@ int read_switches(XMLNode *node, t_switches *switches) {
             switches->base = strtol(strndup(attr->value, 256), NULL, 0);
         } else if (strncmp(attr->name, "default", 8) == 0) {
             int a, b, c, d, n;  // up to four values
+            //Fix incorrect spaces
+            char *temp=attr->value;
+            while (*temp != '\0' ){
+               if (*temp == ' ' ) {
+                 *temp = ',';
+               }
+               temp++;
+            } 
             n = sscanf(attr->value, "%X,%X,%X,%X", &a, &b, &c, &d);
             if (n-- > 0) switches->defaults |= (a & 0xff);
             if (n-- > 0) switches->defaults |= ((b & 0xff) << 8);
@@ -322,6 +330,7 @@ int mra_load(char *filename, t_mra *mra) {
 
     read_root(root, mra);
     read_roms(root, &mra->roms, &mra->n_roms);
+    XMLDoc_free(doc);
 
     return 0;
 }
