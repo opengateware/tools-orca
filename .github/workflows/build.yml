@@ -1,0 +1,114 @@
+################################################################################
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileType: OTHER
+# SPDX-FileCopyrightText: (c) 2022, OpenGateware authors and contributors
+################################################################################
+name: Build/Release
+on:
+  pull_request:
+  release:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'locale/**'
+      - 'pkg/**'
+      - 'samples/**'
+      - '.clang-format'
+      - '.clang-tidy'
+      - '.gitattributes'
+      - '.gitingore'
+      - '.mailmap'
+      - 'AUTHORS'
+      - 'CMakeLists.txt'
+      - 'Makefile'
+      - 'LICENSE'
+      - '**.md'
+      - '**.json'
+################################################################################
+jobs:
+  ##############################################################################
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: '🧰 Checkout Repository'
+        uses: actions/checkout@v3
+
+      - name: '🏗️ Build ORCA for Linux'
+        run: |
+          cmake -G "Unix Makefiles" -B cmake-build-linux -DCMAKE_BUILD_TYPE=Debug
+          cmake --build cmake-build-linux
+          cd cmake-build-linux && cpack
+
+      - name: '🟦 Upload Artifacts'
+        uses: actions/upload-artifact@v3
+        with:
+          name: orca-linux
+          path: |
+            cmake-build-linux/releases/*
+          retention-days: 7
+
+      - name: '🚀 Create a new GitHub Release'
+        if: contains(github.ref, 'tags/v')
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          files: |
+            cmake-build-linux/releases/*
+
+  ##############################################################################
+  build-mingw:
+    runs-on: ubuntu-latest
+    steps:
+      - name: '🧰 Checkout Repository'
+        uses: actions/checkout@v3
+
+      - name: '🏗️ Build ORCA for MinGW'
+        run: |
+          sudo apt update && sudo apt install -y libz-mingw-w64-dev mingw-w64
+          cmake -DCMAKE_TOOLCHAIN_FILE=./pkg/mingw-w64-x86_64.cmake -B cmake-build-mingw -DCMAKE_BUILD_TYPE=Debug
+          cmake --build cmake-build-mingw
+          cd cmake-build-mingw && cpack
+
+      - name: '🟦 Upload Artifacts'
+        uses: actions/upload-artifact@v3
+        with:
+          name: orca-win-mingw
+          path: |
+            cmake-build-mingw/releases/*
+          retention-days: 7
+
+      - name: '🚀 Create a new GitHub Release'
+        if: contains(github.ref, 'tags/v')
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          files: |
+            cmake-build-mingw/releases/*
+
+  ##############################################################################
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: '🧰 Checkout Repository'
+        uses: actions/checkout@v3
+
+      - name: '🏗️ Build ORCA for macOS'
+        run: |
+          cmake -G "Unix Makefiles" -B cmake-build-macos -DCMAKE_BUILD_TYPE=Debug
+          cmake --build cmake-build-macos
+          cd cmake-build-macos && cpack
+
+      - name: '🟦 Upload Artifacts'
+        uses: actions/upload-artifact@v3
+        with:
+          name: orca-macos
+          path: |
+            cmake-build-macos/releases/*
+          retention-days: 7
+
+      - name: '🚀 Create a new GitHub Release'
+        if: contains(github.ref, 'tags/v')
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          files: |
+            cmake-build-macos/releases/*
+
+

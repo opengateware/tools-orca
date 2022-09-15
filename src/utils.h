@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * SPDX-License-Identifier: MPL-2.0
+ * SPDX-FileType: SOURCE
+ * SPDX-FileCopyrightText: (c) 2022, OpenGateware authors and contributors
+ *******************************************************************************
+ *
+ * ORCA (Open ROM Conversion Assistant)
+ * Copyright (c) 2022, OpenGateware authors and contributors (see AUTHORS file)
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ ******************************************************************************/
+
+/*!*****************************************************************************
+ * @file build.cpp
+ * @brief
+ ******************************************************************************/
+
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
@@ -5,13 +25,12 @@
 #include <ctype.h>
 
 typedef struct s_string_list {
-  char **elements;
-  int n_elements;
+	char **elements;
+	int n_elements;
 } t_string_list;
-
-#if defined(_WIN32) || defined(_WIN64)
 // strndup() is not available on Windows
-char *strndup( const char *s1, size_t n);
+#if defined(_WIN32) || defined(_WIN64)
+char *strndup(const char *s1, size_t n);
 #endif
 
 char *str_toupper(char *src);
