@@ -23,6 +23,12 @@
 
 #include "mra.h"
 
+#define MAX_LINE_LENGTH 256
+#define MAX_CONTENT_LENGTH 25
+#define MAX_CONF_OPT_LENGTH 128
+
 int write_arc(t_mra *mra, char *filename);
+char *format_bits(t_mra *mra, t_dip *dip);
+int check_ids_len(t_dip *dip);
 
 #endif

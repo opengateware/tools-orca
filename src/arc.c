@@ -26,10 +26,6 @@
 #include "globals.h"
 #include "utils.h"
 
-#define MAX_LINE_LENGTH 256
-#define MAX_CONTENT_LENGTH 25
-#define MAX_CONF_OPT_LENGTH 128
-
 char *format_bits(t_mra *mra, t_dip *dip) {
 	char buffer[256] = "O";
 	int start = 1;
@@ -70,8 +66,8 @@ char *format_bits(t_mra *mra, t_dip *dip) {
 }
 
 int check_ids_len(t_dip *dip) {
-	int nlen;
-	int tlen;
+	unsigned long nlen;
+	unsigned long tlen;
 	char copy[MAX_LINE_LENGTH];
 	char *tok;
 
@@ -80,7 +76,7 @@ int check_ids_len(t_dip *dip) {
 	tok = strtok(copy, ",");
 	tlen = nlen;
 	while(tok) {
-		int j = strlen(tok);
+		unsigned long j = strlen(tok);
 		tlen += j + 1;
 		if(tlen > MAX_CONF_OPT_LENGTH) {
 			return 1;
@@ -146,7 +142,7 @@ int write_arc(t_mra *mra, char *filename) {
 	fwrite(buffer, 1, n, out);
 
 	if(mra->switches.n_dips && mra->switches.defaults) {
-		n = snprintf(buffer, MAX_LINE_LENGTH, "DEFAULT=0x%llX\n", mra->switches.defaults << mra->switches.base);
+		n = snprintf(buffer, MAX_LINE_LENGTH, "DEFAULT=0x%X\n", mra->switches.defaults << mra->switches.base);
 		fwrite(buffer, 1, n, out);
 	}
 	if(mra->switches.page_id && mra->switches.page_name) {

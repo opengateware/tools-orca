@@ -239,9 +239,9 @@ int read_switches(XMLNode *node, t_switches *switches) {
 	// Read all attributes
 	for(i = 0; i < node->n_attributes; i++) {
 		XMLAttribute *attr = &node->attributes[i];
-		if(strncmp(attr->name, "base", 10) == 0) {
+		if(strncmp(attr->name, "base", 4) == 0) {
 			switches->base = strtol(strndup(attr->value, 256), NULL, 0);
-		} else if(strncmp(attr->name, "default", 8) == 0) {
+		} else if(strncmp(attr->name, "default", 7) == 0) {
 			int a, b, c, d, n; // up to four values
 			// Fix incorrect spaces
 			char *temp = attr->value;
@@ -264,9 +264,9 @@ int read_switches(XMLNode *node, t_switches *switches) {
 			if(n-- > 0) {
 				switches->defaults |= ((d & 0xff) << 24);
 			}
-		} else if(strncmp(attr->name, "page_id", 8) == 0) {
+		} else if(strncmp(attr->name, "page_id", 7) == 0) {
 			switches->page_id = strtol(strndup(attr->value, 256), NULL, 0);
-		} else if(strncmp(attr->name, "page_name", 10) == 0) {
+		} else if(strncmp(attr->name, "page_name", 9) == 0) {
 			switches->page_name = strndup(attr->value, 26);
 		}
 	}
@@ -274,7 +274,7 @@ int read_switches(XMLNode *node, t_switches *switches) {
 	// Read DIPs
 	for(i = 0; i < node->n_children; i++) {
 		XMLNode *child = node->children[i];
-		if(strncmp(child->tag, "dip", 4) == 0) {
+		if(strncmp(child->tag, "dip", 3) == 0) {
 			switches->n_dips++;
 			switches->dips = (t_dip *)realloc(switches->dips, sizeof(t_dip) * (switches->n_dips));
 			read_dip_switch(child, switches->dips + switches->n_dips - 1);

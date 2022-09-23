@@ -6,7 +6,7 @@ endif ()
 
 # Project Information
 project(ORCA
-		VERSION "0.1.0"
+		VERSION "0.2.0"
 		DESCRIPTION "Open ROM Conversion Assistant"
 		HOMEPAGE_URL "https://github.com/opengateware/tools-orca"
 		LANGUAGES C)
